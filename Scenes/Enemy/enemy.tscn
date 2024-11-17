@@ -1,8 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://dfa4ufvkwxcby"]
+[gd_scene load_steps=6 format=3 uid="uid://dfa4ufvkwxcby"]
 
 [ext_resource type="Script" path="res://Scripts/Enemy/enemy.gd" id="1_fpsvg"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xoy88"]
+albedo_color = Color(1, 0, 0, 1)
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_scdym"]
+material = SubResource("StandardMaterial3D_xoy88")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uedc6"]
 
