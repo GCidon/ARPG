@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://dfa4ufvkwxcby"]
+
+[ext_resource type="Script" path="res://Scripts/Enemy/enemy.gd" id="1_fpsvg"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_scdym"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uedc6"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0rvje"]
+radius = 5.0
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_ljcfv"]
+
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1_fpsvg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_scdym")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_uedc6")
+
+[node name="DetectionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionArea"]
+shape = SubResource("SphereShape3D_0rvje")
+
+[node name="AttackLine" type="MeshInstance3D" parent="."]
+mesh = SubResource("ImmediateMesh_ljcfv")

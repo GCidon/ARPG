@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://c02ywnkeehhy0"]
+
+[ext_resource type="PackedScene" uid="uid://c52w07gcpgid" path="res://Scenes/Character/player.tscn" id="1_jfeem"]
+[ext_resource type="PackedScene" uid="uid://dfa4ufvkwxcby" path="res://Scenes/Enemy/enemy.tscn" id="2_61yx3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_actvp"]
+size = Vector3(10, 0.1, 10)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_m3524"]
+size = Vector2(10, 10)
+
+[node name="World" type="Node3D"]
+
+[node name="Player" parent="." instance=ExtResource("1_jfeem")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 5)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.713108)
+gravity_scale = 0.0
+freeze = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("BoxShape3D_actvp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+mesh = SubResource("PlaneMesh_m3524")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.0702788, 0.997527, 0, -0.997527, -0.0702788, 0, 2.22948, 2.85566)
+
+[node name="Enemy" parent="." instance=ExtResource("2_61yx3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -3)
