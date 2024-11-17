@@ -5,10 +5,13 @@ class_name PlayerCharacter extends Character
 @onready var mount : CameraMount = $Mount
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-
-func _ready():
+	
+func setup():
 	detection_area.body_entered.connect(_on_detection_area_body_entered)
 	detection_area.body_exited.connect(_on_detection_area_body_exited)
+	var shape = detection_area.get_child(0) as CollisionShape3D
+	var sphere : SphereShape3D = shape.shape as SphereShape3D
+	sphere.radius = 8
 	line_color = Color.BLUE
 
 func _physics_process(delta):

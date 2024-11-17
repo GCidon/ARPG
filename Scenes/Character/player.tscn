@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://c52w07gcpgid"]
+[gd_scene load_steps=5 format=3 uid="uid://c52w07gcpgid"]
 
 [ext_resource type="Script" path="res://Scripts/CharacterMove.gd" id="1_sahxx"]
 [ext_resource type="Script" path="res://Scripts/CameraMount.gd" id="2_66r06"]
@@ -6,9 +6,6 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j7kxu"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ncbvj"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_6lmxe"]
-radius = 5.0
 
 [node name="Player" type="Node3D"]
 
@@ -26,8 +23,3 @@ script = ExtResource("2_66r06")
 
 [node name="CameraPOV" type="Camera3D" parent="CharacterBody3D/Mount"]
 transform = Transform3D(1, 0, 0, 0, 0.866026, 0.5, 0, -0.5, 0.866026, 0, 2, 4)
-
-[node name="DetectionArea" type="Area3D" parent="CharacterBody3D"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D/DetectionArea"]
-shape = SubResource("SphereShape3D_6lmxe")

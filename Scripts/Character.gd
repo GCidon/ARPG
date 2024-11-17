@@ -1,7 +1,7 @@
 class_name Character
 extends CharacterBody3D
 
-@onready var detection_area : Area3D = $DetectionArea
+var detection_area : Area3D
 
 var attack_line_mesh : MeshInstance3D
 var immediate_mesh : ImmediateMesh
@@ -11,6 +11,19 @@ var body_detected : Node3D = null
 var target_position : Vector3 = Vector3.ZERO
 
 var line_color = Color.RED
+
+func _ready():
+	detection_area = Area3D.new()
+	var shape = CollisionShape3D.new()
+	var sphere : SphereShape3D = SphereShape3D.new()
+	sphere.radius = 5
+	shape.shape = sphere
+	detection_area.add_child(shape)
+	add_child(detection_area)
+	setup()
+	
+func setup():
+	pass
 
 func _process(delta):
 	if body_detected != null:
