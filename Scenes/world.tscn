@@ -14,15 +14,15 @@ size = Vector2(50, 50)
 [node name="Player" parent="." instance=ExtResource("1_jfeem")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 7.87531)
 
-[node name="RigidBody3D" type="RigidBody3D" parent="."]
+[node name="Suelo" type="RigidBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.713108)
 gravity_scale = 0.0
 freeze = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Suelo"]
 shape = SubResource("BoxShape3D_actvp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Suelo"]
 mesh = SubResource("PlaneMesh_m3524")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]

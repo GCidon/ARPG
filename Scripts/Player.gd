@@ -1,10 +1,13 @@
-class_name PlayerCharacter extends Character
+class_name PlayerCharacter extends AttackCharacter
 
 @export var SPEED = 5.0
 
 @onready var mount : CameraMount = $Mount
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+
+func _ready():
+	super._ready()
 	
 func setup():
 	detection_area.body_entered.connect(_on_detection_area_body_entered)
@@ -30,9 +33,11 @@ func _physics_process(delta):
 	move_and_slide()
 
 func _on_detection_area_body_entered(body):
-	if body is EnemyCharacter:
-		super.detection_enter(body)
+	if !(body is EnemyCharacter):
+		return
+	super._on_detection_area_body_entered(body)
 
 func _on_detection_area_body_exited(body):
-	if body is EnemyCharacter:
-		super.detection_exit(body)
+	if !(body is EnemyCharacter):
+		return
+	super._on_detection_area_body_exited(body)

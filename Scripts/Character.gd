@@ -1,5 +1,4 @@
-class_name Character
-extends CharacterBody3D
+class_name Character extends CharacterBody3D
 
 var detection_area : Area3D
 
@@ -34,13 +33,14 @@ func _process(delta):
 		immediate_mesh.surface_add_vertex(target_position)
 		immediate_mesh.surface_end()
 		
-func detection_enter(body):
+func _on_detection_area_body_entered(body):
 	body_detected = body
 	target_position = body_detected.global_position
 		
 	create_attack_line(target_position)
+	detect()
 	
-func detection_exit(body):
+func _on_detection_area_body_exited(body):
 	body_detected = null
 	target_position = Vector3.ZERO
 			
@@ -67,4 +67,7 @@ func destroy_attack_line():
 func final_cleanup(mesh_instance: MeshInstance3D):
 	get_tree().get_root().add_child(mesh_instance)
 	return mesh_instance
+	
+func detect():
+	pass
 
