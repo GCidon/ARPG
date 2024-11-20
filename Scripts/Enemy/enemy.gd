@@ -10,9 +10,11 @@ func setup():
 func _on_detection_area_body_entered(body):
 	if !(body is PlayerCharacter):
 		return
+	chase()
 	super._on_detection_area_body_entered(body)
 
 func _on_detection_area_body_exited(body):
 	if !(body is PlayerCharacter):
 		return
+	stop_chase()
 	super._on_detection_area_body_exited(body)

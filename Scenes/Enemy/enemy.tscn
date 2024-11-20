@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dfa4ufvkwxcby"]
+[gd_scene load_steps=7 format=3 uid="uid://dfa4ufvkwxcby"]
 
 [ext_resource type="Script" path="res://Scripts/Enemy/enemy.gd" id="1_fpsvg"]
+[ext_resource type="PackedScene" uid="uid://boclc7cujivpo" path="res://Scenes/UI/hp_loss_text.tscn" id="2_5dgny"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xoy88"]
-albedo_color = Color(1, 0, 0, 1)
+albedo_color = Color(0, 1, 0, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_scdym"]
 material = SubResource("StandardMaterial3D_xoy88")
@@ -23,3 +24,8 @@ shape = SubResource("CapsuleShape3D_uedc6")
 
 [node name="AttackLine" type="MeshInstance3D" parent="."]
 mesh = SubResource("ImmediateMesh_ljcfv")
+
+[node name="HpLossText" parent="." instance=ExtResource("2_5dgny")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.40396, 0)
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]

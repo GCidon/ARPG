@@ -6,6 +6,8 @@ class_name PlayerCharacter extends AttackCharacter
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
+var controlled_movement : bool = false
+
 func _ready():
 	super._ready()
 	
@@ -21,6 +23,12 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "up", "down")
 	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, mount.rotation.y).normalized()
 	
+	controlled_movement = (input_dir != Vector2.ZERO)
+	
+	if !controlled_movement:
+		super._physics_process(delta)
+		return
+	
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
@@ -35,9 +43,11 @@ func _physics_process(delta):
 func _on_detection_area_body_entered(body):
 	if !(body is EnemyCharacter):
 		return
+	chase()
 	super._on_detection_area_body_entered(body)
 
 func _on_detection_area_body_exited(body):
 	if !(body is EnemyCharacter):
 		return
+	stop_chase()
 	super._on_detection_area_body_exited(body)

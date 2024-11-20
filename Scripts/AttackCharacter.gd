@@ -1,4 +1,4 @@
-class_name AttackCharacter extends Character
+class_name AttackCharacter extends DetectableCharacter
 
 var attack_timer : Timer = null
 
@@ -28,9 +28,16 @@ func _ready():
 func _process(delta):
 	super._process(delta)
 	if onRangeToAttack and readyToAttack:
-		print("ataque de " + name)
+		if body_detected == null:
+			onRangeToAttack = false
+			return
+		make_attack()
 		readyToAttack = false
 		attack_timer.start()
+		
+func make_attack():
+	var char : Character = body_detected as Character
+	char.take_phys_damage(attack)
 	
 func attack_base():
 	readyToAttack = true
@@ -44,4 +51,5 @@ func _on_attack_area_body_entered(body):
 		onRangeToAttack = true
 		
 func _on_attack_area_body_exited(body):
-	pass
+	if body == body_detected:
+		onRangeToAttack = false

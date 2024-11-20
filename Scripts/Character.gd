@@ -1,73 +1,70 @@
 class_name Character extends CharacterBody3D
 
-var detection_area : Area3D
+var hp : int = 5
+var mp : int = 10
+var attack : int = 10
+var mattack : int = 4
+var armor : int = 5
+var mres : int = 4
+var speed : int = 5
 
-var attack_line_mesh : MeshInstance3D
-var immediate_mesh : ImmediateMesh
-var material : ORMMaterial3D = ORMMaterial3D.new()
+var dmg_timer : Timer
+var prev_color : Color
 
-var body_detected : Node3D = null
-var target_position : Vector3 = Vector3.ZERO
+@onready var hp_loss : HpLossText = $HpLossText as HpLossText
 
-var line_color = Color.RED
+@onready var nav_agent : NavigationAgent3D = $NavigationAgent3D
 
 func _ready():
-	detection_area = Area3D.new()
-	var shape = CollisionShape3D.new()
-	var sphere : SphereShape3D = SphereShape3D.new()
-	sphere.radius = 5
-	shape.shape = sphere
-	detection_area.add_child(shape)
-	add_child(detection_area)
-	setup()
+	dmg_timer = Timer.new()
+	add_child(dmg_timer)
+	dmg_timer.wait_time = 0.2
+	dmg_timer.timeout.connect(quitarse_red)
 	
-func setup():
-	pass
+func _physics_process(delta):
+	var destination = nav_agent.get_next_path_position()
+	var local_dest = destination - global_position
+	var dest = local_dest.normalized()
+	
+	velocity = dest * 5.0
+	move_and_slide()
 
-func _process(delta):
-	if body_detected != null:
-		target_position = body_detected.global_position
-		immediate_mesh.clear_surfaces()
-		immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
-		immediate_mesh.surface_add_vertex(global_position)
-		immediate_mesh.surface_add_vertex(target_position)
-		immediate_mesh.surface_end()
-		
-func _on_detection_area_body_entered(body):
-	body_detected = body
-	target_position = body_detected.global_position
-		
-	create_attack_line(target_position)
-	detect()
+func take_phys_damage(dmg):
+	var real_dmg = dmg * (100/(100+armor))
+	take_real_dmg(real_dmg)
 	
-func _on_detection_area_body_exited(body):
-	body_detected = null
-	target_position = Vector3.ZERO
-			
-	destroy_attack_line()	
+func take_mag_damage(dmg):
+	var real_dmg = dmg * (100/(100+mres))
+	take_real_dmg(real_dmg)
 		
-func create_attack_line(target_position):
-	attack_line_mesh = MeshInstance3D.new()
-	immediate_mesh = ImmediateMesh.new()
-	attack_line_mesh.mesh = immediate_mesh
-	attack_line_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.albedo_color = line_color
-	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
-	immediate_mesh.surface_add_vertex(global_position)
-	immediate_mesh.surface_add_vertex(target_position)
-	immediate_mesh.surface_end()
-	return await final_cleanup(attack_line_mesh)
-	
-func destroy_attack_line():
-	attack_line_mesh.queue_free()
-	attack_line_mesh = null
-	immediate_mesh = null
-		
-func final_cleanup(mesh_instance: MeshInstance3D):
-	get_tree().get_root().add_child(mesh_instance)
-	return mesh_instance
-	
-func detect():
-	pass
+func take_real_dmg(dmg):
+	if dmg < 1:
+		dmg = 1
+	hp -= dmg
+	if hp <= 0:
+		hp = 0
+		die()
+	else:
+		ponerse_red()
+		dmg_timer.start()
+		hp_loss.change_num(dmg)
 
+func die():
+	queue_free()
+	
+func ponerse_red():
+	var meshinst = $MeshInstance3D as MeshInstance3D
+	var cill = meshinst.mesh as CapsuleMesh
+	var mat = cill.material as StandardMaterial3D
+	prev_color = mat.albedo_color
+	mat.albedo_color = Color.RED
+	
+func quitarse_red():
+	var meshinst = $MeshInstance3D as MeshInstance3D
+	var cill = meshinst.mesh as CapsuleMesh
+	var mat = cill.material as StandardMaterial3D
+	mat.albedo_color = prev_color
+	dmg_timer.stop()
+	
+func go_to(newpos):
+	nav_agent.target_position = newpos
